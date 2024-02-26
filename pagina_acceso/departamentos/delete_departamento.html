@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD Index</title>
+    <title>Eliminando registros</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -18,32 +18,36 @@
                 <a class="nav-link" href="index.html">Index</a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdownEmpleado" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Empleado
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownEmpleado" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Empleados
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownEmpleado">
-                    <a class="dropdown-item" href="empleado/create.html">Crear</a>
-                    <a class="dropdown-item" href="empleado/read.html">Leer</a>
-                    <a class="dropdown-item" href="empleado/update.html">Actualizar</a>
-                    <a class="dropdown-item" href="empleado/delete.html">Eliminar</a>
+                    <a class="dropdown-item" href="../empleado/create_empleado.html">Crear</a>
+                    <a class="dropdown-item" href="../empleado/read_empleado.html">Leer</a>
+                    <a class="dropdown-item" href="../empleado/update_empleado.html">Actualizar</a>
+                    <a class="dropdown-item" href="../empleado/delete_empleado.html">Eliminar</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdownDepartamento" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Departamento
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDepartamento" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Departamentos
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownDepartamento">
-                    <a class="dropdown-item" href="departamento/create.html">Crear</a>
-                    <a class="dropdown-item" href="departamento/read.html">Leer</a>
-                    <a class="dropdown-item" href="departamento/update.html">Actualizar</a>
-                    <a class="dropdown-item" href="departamento/delete.html">Eliminar</a>
+                    <a class="dropdown-item" href="create_departamento.html">Crear</a>
+                    <a class="dropdown-item" href="read_departamento.html">Leer</a>
+                    <a class="dropdown-item" href="update_departamento.html">Actualizar</a>
+                    <a class="dropdown-item" href="#">Eliminar</a>
                 </div>
             </li>
         </ul>
     </div>
 	</nav>
     <div class="container mt-5">
-        <h2>WELCOME</h2>
+        <h2>Eliminar registro</h2>
+        <form>
+            <p>Seguro que quieres eliminar este departamento?</p>
+            <button type="submit" class="btn btn-danger">Eliminar registro</button>
+        </form>
     </div>
 	<!-- Bootstrap JS and jQuery (Bootstrap lo requiere) -->
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
