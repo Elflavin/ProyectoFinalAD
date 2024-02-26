@@ -18,5 +18,5 @@ https://getbootstrap.com
 https://proyectofinalad-af58a-default-rtdb.europe-west1.firebasedatabase.app/
 
 
-###** IMPORTANTE **
+### ** IMPORTANTE **
 Si se acaba con uno de los objetivos sacalo de la lista, muchas gracias.
