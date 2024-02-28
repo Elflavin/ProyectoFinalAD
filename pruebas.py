@@ -1,13 +1,16 @@
 # Podemos cambiar algunas cosas en esta clase para admitir pruebas directas relacionadas con la bd
 
-def validarEntero(vacio, mensaje, intentos=5):
+# Vacio esta para cuando quieras modificar, si no es asi pasa por parametro False.
+# Valor es el dato que debemos manejar
+# En intentos pone el numero de intentos que quieras que tenga el usuario
+
+def validarEntero(vacio, valor, intentos): 
     for _ in range(intentos):
         try:
-            valor_str = input(mensaje)
-            if vacio and valor_str.strip() == "":
+            if vacio and valor.strip() == "":
                 return None
             else:
-                valor = int(valor_str)
+                valor_int = int(valor)
                 return valor
         except ValueError:
             print("Error: Debe ingresar un número entero.")
@@ -15,9 +18,8 @@ def validarEntero(vacio, mensaje, intentos=5):
     return None
 
 
-def validarCadena(vacio, mensaje, intentos=5):
+def validarCadena(vacio, valor, intentos):
     for _ in range(intentos):
-        valor = input(mensaje)
         if valor.replace(" ", "").isalpha():
             return valor
         elif (vacio and valor == ""):
@@ -26,9 +28,8 @@ def validarCadena(vacio, mensaje, intentos=5):
             print("debe ingresar solo letras")
     print("Demasiados intentos fallidos. Abortando operación.")
 
-def validarDni(vacio, mensaje, intentos):
+def validarDni(vacio, valor, intentos):
     for _ in range(intentos):
-        valor = input(mensaje).strip()
         if len(valor) == 9 and valor[:-1].isdigit() and valor[-1].isalpha():
             return valor.upper()  # Convertir la letra a mayuscula
         elif vacio and valor == "":
