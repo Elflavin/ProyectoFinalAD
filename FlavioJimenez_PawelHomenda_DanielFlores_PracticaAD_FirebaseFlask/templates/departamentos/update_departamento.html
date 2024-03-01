@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizando registros</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">CRUD ejemplo</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="index.html">Index</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownEmpleado" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Empleados
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownEmpleado">
+                    <a class="dropdown-item" href="http://127.0.0.1:5000/empleados/VistaCrear">Crear</a>
+                    <a class="dropdown-item" href="http://127.0.0.1:5000/empleados/VistaLeer">Leer</a>
+                    <a class="dropdown-item" href="http://127.0.0.1:5000/empleados/VistaModificar">Actualizar</a>
+                    <a class="dropdown-item" href="http://127.0.0.1:5000/empleados/VistaBorrar">Eliminar</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDepartamento" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Departamentos
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownDepartamento">
+                    <a class="dropdown-item" href="http://127.0.0.1:5000/departamentos/VistaCrear">Crear</a>
+                    <a class="dropdown-item" href="http://127.0.0.1:5000/departamentos/VistaLeer">Leer</a>
+                    <a class="dropdown-item" href="#">Actualizar</a>
+                    <a class="dropdown-item" href="http://127.0.0.1:5000/departamentos/VistaBorrar">Eliminar</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+	</nav>
+    <div class="container mt-5">
+        <h2>Actualizar registros</h2>
+        <form>
+            <div class="form-group">
+                <label for="updateFirstName">Nombre:</label>
+                <input type="text" class="form-control" id="updateName" name="updateName" required>
+            </div>
+            <div class="form-group">
+                <label for="updateLastName">Descripcion:</label>
+                <input type="text" class="form-control" id="updateDescr" name="updateDescr" required>
+            </div>
+			<div>
+				<!-- Aqui debemos poner algun menu desplegable para seleccionar lider -->
+				<!-- Ejemplo:
+					
+					Nombre | Apellido | Dni |
+					
+						E1	| E1	| E1	| [x]
+						E2	| E2	| E2	| [ ]
+						
+					Asignar lider
+					
+					Tambien podemos hacerlo en un html a parte y ahorrarnos problemas
+				
+				-->
+			</div>
+            <button type="submit" class="btn btn-primary">Actualizar departamento</button>
+        </form>
+    </div>
+	<!-- Bootstrap JS and jQuery (Bootstrap lo requiere) -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

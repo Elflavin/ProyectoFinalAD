@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import firebase_admin
 from firebase_admin import credentials, db
 
@@ -12,6 +12,44 @@ firebase_admin.initialize_app(cred, {
 
 # Referencia a la base de datos en tiempo real de Firebase
 ref = db.reference()
+
+"""
+    RUTAS VISTA
+"""
+
+@app.route("/", methods=['GET'])
+def menu_principal():
+    return render_template('index.html')
+
+
+@app.route("/empleados/VistaCrear", methods=['GET'])
+def vista_crear_empleado():
+    return render_template('empleado/create_empleado.html')
+@app.route("/empleados/VistaBorrar", methods=['GET'])
+def vista_borrar_empleado():
+    return render_template('empleado/delete_empleado.html')
+@app.route("/empleados/VistaModificar", methods=['GET'])
+def vista_modificar_empleado():
+    return render_template('empleado/update_empleado.html')
+@app.route("/empleados/VistaLeer", methods=['GET'])
+def vista_crear_empleado():
+    return render_template('empleado/read_empleado.html')
+
+
+@app.route("/departamento/VistaCrear", methods=['GET'])
+def vista_crear_departamento():
+    return render_template('departamento/create_departamento.html')
+@app.route("/departamento/VistaBorrar", methods=['GET'])
+def vista_borrar_departamento():
+    return render_template('departamento/delete_departamento.html')
+@app.route("/departamento/VistaModificar", methods=['GET'])
+def vista_modificar_departamento():
+    return render_template('departamento/update_departamento.html')
+@app.route("/departamento/VistaLeer", methods=['GET'])
+def vista_crear_departamento():
+    return render_template('departamento/read_departamento.html')
+
+
 
 """
     RUTAS EMPLEADOS
