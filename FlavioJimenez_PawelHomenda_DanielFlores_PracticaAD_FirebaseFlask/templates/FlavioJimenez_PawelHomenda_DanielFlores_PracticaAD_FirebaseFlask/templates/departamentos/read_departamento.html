@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leer registros</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Proyecto AD</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="index.html">Index</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownEmpleado" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Empleados
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownEmpleado">
+                    <a class="dropdown-item" href="../empleado/create_empleado.html">Crear</a>
+                    <a class="dropdown-item" href="../empleado/read_empleado.html">Leer</a>
+                    <a class="dropdown-item" href="../empleado/update_empleado.html">Actualizar</a>
+                    <a class="dropdown-item" href="../empleado/delete_empleado.html">Eliminar</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDepartamento" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Departamentos
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownDepartamento">
+                    <a class="dropdown-item" href="create_departamento.html">Crear</a>
+                    <a class="dropdown-item" href="#">Leer</a>
+                    <a class="dropdown-item" href="update_departamento.html">Actualizar</a>
+                    <a class="dropdown-item" href="delete_departamento.html">Eliminar</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+	</nav>
+    <div class="container mt-5">
+        <h2>Lista empleados</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+					<th>Lider</th>
+					<th>Nº Empleados</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Mostrar registros de la db aqui -->
+            </tbody>
+        </table>
+    </div>
+	<!-- Bootstrap JS and jQuery (Bootstrap lo requiere) -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Firebase -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1kmmFjAazn52p1YKZ0ZfZPs-wT3O5b8c",
+            authDomain: "proyectofinalad-af58a.firebaseapp.com",
+            databaseURL: "https://proyectofinalad-af58a-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "proyectofinalad-af58a",
+            storageBucket: "proyectofinalad-af58a.appspot.com",
+            messagingSenderId: "266691159088",
+            appId: "1:266691159088:web:983ea3b7ab95a86f5a79f5",
+            measurementId: "G-3REBPY06WZ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        // Reference to the Firebase Realtime Database
+        const db = getDatabase();
+
+        // Reference to the "empleados" node in the database (adjust as per your database structure)
+        const empleadosRef = ref(db, 'empleados');
+
+        // Function to display employee data in the table
+        function displayEmployeeData(snapshot) {
+            const employees = snapshot.val();
+            const tableBody = document.getElementById('employeeTableBody');
+
+            // Clear existing table rows
+            tableBody.innerHTML = '';
+
+            // Iterate through employees and append rows to the table
+            for (const key in employees) {
+                if (Object.hasOwnProperty.call(employees, key)) {
+                    const employee = employees[key];
+
+                    // Append a new row to the table
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${key}</td>
+                        <td>${employee.nombre}</td>
+                        <td>${employee.descripcion}</td>
+                        <td>${employee.lider}</td>
+                        <td>${employee.numero_empleados}</td>
+                    `;
+
+                    tableBody.appendChild(row);
+                }
+            }
+        }
+
+        // Set up a listener to update the table when data changes
+        onValue(empleadosRef, displayEmployeeData);
+    </script>
+</body>
+</html>
