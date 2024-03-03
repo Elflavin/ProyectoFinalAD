@@ -6,6 +6,7 @@ Proyecto final usando flask y firebase. El json ya esta dentro del proyecto.
 * Cargar las tablas y usar javascript para llevar a cabo alguna de las funciones (recibir objetos en formato json)
 * Enviar nombre y dni a funciones del y upd
 * Cargar read de empleados y departamentos
+* Al cambiar un departamento por otro en empleados deberia enviar el dep antiguo y actualizarlo usando la misma funcion
 * Relacionar empleados y departamentos (incluye modificar el n_emp cada vez que un empleado se va o viene)
 
 ### Link pagina Firebase (REALTIME DATABASE)
