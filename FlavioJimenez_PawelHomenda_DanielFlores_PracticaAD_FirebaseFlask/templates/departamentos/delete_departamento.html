@@ -22,10 +22,10 @@
                     Empleados
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownEmpleado">
-                    <a class="dropdown-item" href="http://127.0.0.1:5000/empleados/VistaCrear">Crear</a>
-                    <a class="dropdown-item" href="http://127.0.0.1:5000/empleados/VistaLeer">Leer</a>
-                    <a class="dropdown-item" href="http://127.0.0.1:5000/empleados/VistaModificar">Actualizar</a>
-                    <a class="dropdown-item" href="http://127.0.0.1:5000/empleados/VistaBorrar">Eliminar</a>
+                    <a class="dropdown-item" href="../empleado/create_empleado.html">Crear</a>
+                    <a class="dropdown-item" href="../empleado/read_empleado.html">Leer</a>
+                    <a class="dropdown-item" href="../empleado/update_empleado.html">Actualizar</a>
+                    <a class="dropdown-item" href="../empleado/delete_empleado.html">Eliminar</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -33,9 +33,9 @@
                     Departamentos
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownDepartamento">
-                    <a class="dropdown-item" href="http://127.0.0.1:5000/departamentos/VistaCrear">Crear</a>
-                    <a class="dropdown-item" href="http://127.0.0.1:5000/departamentos/VistaLeer">Leer</a>
-                    <a class="dropdown-item" href="http://127.0.0.1:5000/departamentos/VistaModificar">Actualizar</a>
+                    <a class="dropdown-item" href="create_departamento.html">Crear</a>
+                    <a class="dropdown-item" href="read_departamento.html">Leer</a>
+                    <a class="dropdown-item" href="update_departamento.html">Actualizar</a>
                     <a class="dropdown-item" href="#">Eliminar</a>
                 </div>
             </li>
@@ -44,8 +44,17 @@
 	</nav>
     <div class="container mt-5">
         <h2>Eliminar registro</h2>
-        <form>
+        <form id="formEliminar" onsubmit="return validarSeleccion()" action="/departamentos" method="delete">
             <p>Seguro que quieres eliminar este departamento?</p>
+            <div class="form-group">
+                <label for="departamentoSelect">Selecciona un departamento:</label>
+                <select id="departamentoSelect" class="form-control" required>
+                    <option value="" disabled selected>Selecciona un departamento</option>
+                    <!-- Las opciones se llenarán dinámicamente con JavaScript -->
+                </select>
+            </div>
+            <!-- Campo oculto para almacenar el ID del departamento seleccionado -->
+            <input type="hidden" id="obj" name="obj">
             <button type="submit" class="btn btn-danger">Eliminar registro</button>
         </form>
     </div>
@@ -53,5 +62,77 @@
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.1/firebase-database.js"></script>
+	<script>
+		// Import the functions you need from the SDKs you need
+		import { initializeApp } from "firebase/app";
+		import { getAnalytics } from "firebase/analytics";
+		// TODO: Add SDKs for Firebase products that you want to use
+		// https://firebase.google.com/docs/web/setup#available-libraries
+
+		// Your web app's Firebase configuration
+		// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+		const firebaseConfig = {
+			apiKey: "AIzaSyA1kmmFjAazn52p1YKZ0ZfZPs-wT3O5b8c",
+			authDomain: "proyectofinalad-af58a.firebaseapp.com",
+			databaseURL: "https://proyectofinalad-af58a-default-rtdb.europe-west1.firebasedatabase.app",
+			projectId: "proyectofinalad-af58a",
+			storageBucket: "proyectofinalad-af58a.appspot.com",
+			messagingSenderId: "266691159088",
+			appId: "1:266691159088:web:983ea3b7ab95a86f5a79f5",
+			measurementId: "G-3REBPY06WZ"
+		};
+
+	  // Initialize Firebase
+	  const app = initializeApp(firebaseConfig);
+	  const analytics = getAnalytics(app);
+
+      // Referencia a la base de datos
+      var database = firebase.database();
+
+      // Función para llenar el desplegable con datos de Firebase
+      function llenarDesplegable() {
+          var departamentoSelect = document.getElementById("departamentoSelect");
+
+          // Obtén una referencia a la lista de departamentos en tu base de datos
+          var departamentosRef = database.ref("departamentos");
+
+          // Escucha cambios en la lista de departamentos
+          departamentosRef.on("value", function(snapshot) {
+              departamentoSelect.innerHTML = ""; // Limpia opciones anteriores
+
+              // Recorre los departamentos y crea opciones para el desplegable
+              snapshot.forEach(function(departamentoSnapshot) {
+                  var departamento = departamentoSnapshot.val();
+                  var option = document.createElement("option");
+                  option.value = departamento.id;
+                  option.text = departamento.nombre;
+                  departamentoSelect.appendChild(option);
+              });
+          });
+      }
+
+      // Llama a la función al cargar la página
+      window.onload = llenarDesplegable;
+
+      // Función para validar la selección antes de enviar el formulario
+      function validarSeleccion() {
+          var departamentoSelect = document.getElementById("departamentoSelect");
+          var objInput = document.getElementById("obj");
+
+          if (departamentoSelect.value === "") {
+              // Si no se ha seleccionado un departamento, muestra un mensaje y evita el envío del formulario
+              alert("Por favor, selecciona un departamento.");
+              return false;
+          }
+
+          // Almacena el ID del departamento seleccionado en el campo oculto
+          objInput.value = departamentoSelect.value;
+
+          return true; // Permite el envío del formulario si se ha seleccionado un departamento
+      }
+	</script>
 </body>
 </html>

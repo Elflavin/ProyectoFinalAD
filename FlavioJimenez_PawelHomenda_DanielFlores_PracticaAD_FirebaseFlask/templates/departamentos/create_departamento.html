@@ -22,10 +22,10 @@
                     Empleados
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownEmpleado">
-                    <a class="dropdown-item" href="#">Crear</a>
-                    <a class="dropdown-item" href="read_empleado.html">Leer</a>
-                    <a class="dropdown-item" href="update_empleado.html">Actualizar</a>
-                    <a class="dropdown-item" href="delete_empleado.html">Eliminar</a>
+                    <a class="dropdown-item" href="../empleado/create_empleado.html">Crear</a>
+                    <a class="dropdown-item" href="../empleado/read_empleado.html">Leer</a>
+                    <a class="dropdown-item" href="../empleado/update_empleado.html">Actualizar</a>
+                    <a class="dropdown-item" href="../empleado/delete_empleado.html">Eliminar</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -33,10 +33,10 @@
                     Departamentos
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownDepartamento">
-                    <a class="dropdown-item" href="../departamentos/create_departamento.html">Crear</a>
-                    <a class="dropdown-item" href="../departamentos/read_departamento.html">Leer</a>
-                    <a class="dropdown-item" href="../departamentos/update_departamento.html">Actualizar</a>
-                    <a class="dropdown-item" href="../departamentos/delete_departamento.html">Eliminar</a>
+                    <a class="dropdown-item" href="create_departamento.html">Crear</a>
+                    <a class="dropdown-item" href="#">Leer</a>
+                    <a class="dropdown-item" href="update_departamento.html">Actualizar</a>
+                    <a class="dropdown-item" href="delete_departamento.html">Eliminar</a>
                 </div>
             </li>
         </ul>
@@ -44,20 +44,16 @@
 	</nav>
     <div class="container mt-5">
         <h2>Crear registro</h2>
-        <form action="/empleados" method="post">
+        <form action="/departamentos" method="post">
             <div class="form-group">
-                <label for="firstName">Nombre:</label>
-                <input type="text" class="form-control" id="firstName" name="firstName" required>
+                <label for="name">Nombre:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
             </div>
             <div class="form-group">
-                <label for="lastName">Apellido:</label>
-                <input type="text" class="form-control" id="lastName" name="lastName" required>
+                <label for="desc">Descripcion:</label>
+                <input type="text" class="form-control" id="desc" name="desc" required>
             </div>
-            <div>
-                <label for="dni">DNI:</label>
-                <input type="text" class="form-control" id="dni" name="dni" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Crear empleado</button>
+            <button type="submit" class="btn btn-primary">Crear registro</button>
         </form>
     </div>
 	<!-- Bootstrap JS and jQuery (Bootstrap lo requiere) -->
