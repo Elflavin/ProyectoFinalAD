@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizando registros</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">CRUD ejemplo</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="index.html">Index</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownEmpleado" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Empleados
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownEmpleado">
+                    <a class="dropdown-item" href="../empleado/create_empleado.html">Crear</a>
+                    <a class="dropdown-item" href="../empleado/read_empleado.html">Leer</a>
+                    <a class="dropdown-item" href="../empleado/update_empleado.html">Actualizar</a>
+                    <a class="dropdown-item" href="../empleado/delete_empleado.html">Eliminar</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDepartamento" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Departamentos
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownDepartamento">
+                    <a class="dropdown-item" href="create_departamento.html">Crear</a>
+                    <a class="dropdown-item" href="#">Leer</a>
+                    <a class="dropdown-item" href="update_departamento.html">Actualizar</a>
+                    <a class="dropdown-item" href="delete_departamento.html">Eliminar</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+	</nav>
+    <div class="container mt-5">
+        <h2>Actualizar registros</h2>
+        <form action="/departamentos" method="put">
+            <div class="form-group">
+                <label for="updateName">Nombre:</label>
+                <input type="text" class="form-control" id="updateName" name="updateName" required>
+            </div>
+            <div class="form-group">
+                <label for="updateDescr">Descripcion:</label>
+                <input type="text" class="form-control" id="updateDescr" name="updateDescr" required>
+            </div>
+			<div class="form-group">
+				<label for="updateLider">Lider:</label>
+				<select id="updateLider" class="form-control" required>
+					<!-- Opciones se llenarán dinámicamente con JavaScript -->
+				</select>
+			</div>
+        </form>
+    </div>
+	<div class="container mt-5">
+        <h2>Departamento a actualizar</h2>
+        <form id="formUpdate" onsubmit="return validarSeleccion()">
+            <p>Seguro que quieres actualizar este departamento?</p>
+            <div class="form-group">
+                <label for="departamentoSelect">Selecciona un departamento:</label>
+                <select id="departamentoSelect" class="form-control" required>
+                    <option value="" disabled selected>Selecciona un departamento</option>
+                    <!-- Las opciones se llenarán dinámicamente con JavaScript -->
+                </select>
+            </div>
+        </form>
+    </div>
+	<!-- Bootstrap JS and jQuery (Bootstrap lo requiere) -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.1/firebase-database.js"></script>
+	<script>
+		// Import the functions you need from the SDKs you need
+		import { initializeApp } from "firebase/app";
+		import { getAnalytics } from "firebase/analytics";
+		// TODO: Add SDKs for Firebase products that you want to use
+		// https://firebase.google.com/docs/web/setup#available-libraries
+
+		// Your web app's Firebase configuration
+		// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+		const firebaseConfig = {
+			apiKey: "AIzaSyA1kmmFjAazn52p1YKZ0ZfZPs-wT3O5b8c",
+			authDomain: "proyectofinalad-af58a.firebaseapp.com",
+			databaseURL: "https://proyectofinalad-af58a-default-rtdb.europe-west1.firebasedatabase.app",
+			projectId: "proyectofinalad-af58a",
+			storageBucket: "proyectofinalad-af58a.appspot.com",
+			messagingSenderId: "266691159088",
+			appId: "1:266691159088:web:983ea3b7ab95a86f5a79f5",
+			measurementId: "G-3REBPY06WZ"
+		};
+
+	  // Initialize Firebase
+	  const app = initializeApp(firebaseConfig);
+	  const analytics = getAnalytics(app);
+
+      // Referencia a la base de datos
+      var database = firebase.database();
+
+	  // Funcion para llenar el desplegable de seleccion de lider con datos de Firebase
+	  function llenarEmpleados() {
+		  var empleadoSelect = document.getElementById("empleadoSelect");
+		  
+		  // Obten una referencia a la lista de empleados en tu base de datos
+		  var empleadosRef = database.ref("empleados");
+		  
+		  // Escucha cambios en la lista de empleados
+		  empleadosRef.on("value", function(snapshot)) {
+			empleadoSelect.innerHTML = ""; // Limpia opciones anteriores
+			
+			// Recorre los empleados y crea opciones para el desplegable
+			snapshot.forEach(function(empleadoSnapshot)) {
+				var empleado = empleadoSnapshot.val();
+				var option = document.createElement("option");
+				option.value = empleado.id;
+				option.text = empelado.nombre;
+				empleadoSelect.appendChild(option);
+				});
+			});
+		}
+
+      // Función para llenar el desplegable con datos de Firebase
+      function llenarDesplegable() {
+          var departamentoSelect = document.getElementById("departamentoSelect");
+
+          // Obtén una referencia a la lista de departamentos en tu base de datos
+          var departamentosRef = database.ref("departamentos");
+
+          // Escucha cambios en la lista de departamentos
+          departamentosRef.on("value", function(snapshot) {
+              departamentoSelect.innerHTML = ""; // Limpia opciones anteriores
+
+              // Recorre los departamentos y crea opciones para el desplegable
+              snapshot.forEach(function(departamentoSnapshot) {
+                  var departamento = departamentoSnapshot.val();
+                  var option = document.createElement("option");
+                  option.value = departamento.id;
+                  option.text = departamento.nombre;
+                  departamentoSelect.appendChild(option);
+              });
+          });
+      }
+	  
+      // Llama a la función al cargar la página
+      window.onload = llenarDesplegable;
+
+      // Función para validar la selección antes de enviar el formulario
+      function validarSeleccion() {
+          var departamentoSelect = document.getElementById("departamentoSelect");
+
+          if (departamentoSelect.value === "") {
+              // Si no se ha seleccionado un departamento, muestra un mensaje y evita el envío del formulario
+              alert("Por favor, selecciona un departamento.");
+              return false;
+          }
+
+          return true; // Permite el envío del formulario si se ha seleccionado un departamento
+      }
+	  
+	  // Funcion paravalidar laseleccion de empleado antes de enviar el formulario
+	  function validarSeleccionEmpleado() {
+		var empleadoSelect = document.getElementById("empleadoSelect");
+		
+		if (empleadoSelect.vaue == "") {
+			// Si no se ha seleccionado un departamento, muestra un mensaje y evita el envio del formulario
+			alert("Por favor, selecciona un empleado como lider")
+			return false;
+		}
+		
+		return true;
+	  }
+	</script>
+	<div class="container mt-5">
+		<button type="submit" class="btn btn-primary">Actualizar departamento</button>
+	</div>
+</body>
+</html>

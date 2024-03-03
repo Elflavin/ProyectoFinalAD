@@ -4,14 +4,14 @@
 # Valor es el dato que debemos manejar
 # En intentos pone el numero de intentos que quieras que tenga el usuario
 
-def validarEntero(vacio, valor, intentos): 
+def validarEntero(vacio, valor, intentos):
     for _ in range(intentos):
         try:
             if vacio and valor.strip() == "":
                 return None
             else:
                 valor_int = int(valor)
-                return valor
+                return valor_int
         except ValueError:
             print("Error: Debe ingresar un número entero.")
     print("Demasiados intentos fallidos. Abortando operación.")
@@ -22,11 +22,12 @@ def validarCadena(vacio, valor, intentos):
     for _ in range(intentos):
         if valor.replace(" ", "").isalpha():
             return valor
-        elif (vacio and valor == ""):
+        elif vacio and valor == "":
             return None
         else:
             print("debe ingresar solo letras")
     print("Demasiados intentos fallidos. Abortando operación.")
+
 
 def validarDni(vacio, valor, intentos):
     for _ in range(intentos):
