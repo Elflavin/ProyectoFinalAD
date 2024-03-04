@@ -1,8 +1,12 @@
-from FirebaseConn import firebase_admin
+from fireb_init import init
 from firebase_admin import db
 
-ref = db.reference('departamentos')
+try:
+    init()
+except ValueError:
+    print("Base de datos ya definido.")
 
+ref = db.reference('departamentos')
 
 class Departamento:
     def __init__(self, nombre, descr, lider, n_emp):

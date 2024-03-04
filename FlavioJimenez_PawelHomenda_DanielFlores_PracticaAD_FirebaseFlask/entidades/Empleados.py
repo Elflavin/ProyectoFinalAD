@@ -1,6 +1,10 @@
-from FirebaseConn import firebase_admin
+from fireb_init import init
 from firebase_admin import db
 
+try:
+    init()
+except ValueError:
+    print("Base de datos ya definido.")
 
 ref = db.reference('empleados')
 ref_d = db.reference('departamentos')

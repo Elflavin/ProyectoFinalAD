@@ -1,17 +1,10 @@
 from flask import Flask, request, jsonify, render_template
 from entidades.Departamentos import Departamento
 from entidades.Empleados import Empleado
-import firebase_admin
-from firebase_admin import credentials
+
 
 # Inicializacion de la aplicacion de Flask
 app = Flask(__name__)
-
-# Inicializacion de la aplicacion de Firebase
-cred = credentials.Certificate("proyectofinalad-af58a-firebase-adminsdk-czuzh-49f852045b.json")
-firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://proyectofinalad-af58a-default-rtdb.europe-west1.firebasedatabase.app/'
-})
 
 """
     RUTAS VISTA
@@ -39,7 +32,7 @@ def vista_modificar_empleado():
 
 
 @app.route("/empleados/VistaLeer", methods=['GET'])
-def vista_crear_empleado():
+def vista_bucsar_empleado():
     return render_template('empleado/read_empleado.html')
 
 
@@ -59,7 +52,7 @@ def vista_modificar_departamento():
 
 
 @app.route("/departamento/VistaLeer", methods=['GET'])
-def vista_crear_departamento():
+def vista_buscar_departamento():
     return render_template('departamento/read_departamento.html')
 
 
