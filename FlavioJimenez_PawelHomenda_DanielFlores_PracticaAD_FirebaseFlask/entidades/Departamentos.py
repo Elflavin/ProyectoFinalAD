@@ -6,9 +6,12 @@ try:
 except ValueError:
     print("Base de datos ya definido.")
 
-ref = db.reference('departamentos')
+
 
 class Departamento:
+
+    ref = db.reference('departamentos')
+
     def __init__(self, nombre, descr, lider, n_emp):
         self.nombre = nombre
         self.descr = descr
@@ -33,14 +36,14 @@ class Departamento:
                 'lider': nuevo_departamento.lider,
                 'n_emp': nuevo_departamento.n_emp
             }
-            ref.child('departamentos').push(nuevo_departamento_dict)
+            cls.ref.child('departamentos').push(nuevo_departamento_dict)
         else:
             return {'status': 'Error', 'message': 'El nombre ya esta en uso'}
 
 
     @classmethod
     def delDep(cls, dep_id):
-        ref.child('departamentos').child(dep_id).delete()
+        cls.ref.child('departamentos').child(dep_id).delete()
 
     @classmethod
     def updDep(cls, departamento=None, obj=None):
@@ -55,12 +58,12 @@ class Departamento:
             update_data['n_emp'] = departamento.n_emp
 
         key = cls.findRef(obj)
-        ref.child('departamentos').child(key).update(update_data)
+        cls.ref.child('departamentos').child(key).update(update_data)
 
     @classmethod
     def getDep(cls, dep_id):
         key = cls.findRef(dep_id)
-        dep_data = ref.child('departamentos').child(key).get()
+        dep_data = cls.ref.child('departamentos').child(key).get()
         if dep_data:
             return cls(
                 nombre=dep_data.get('nombre'),
@@ -74,7 +77,8 @@ class Departamento:
     @classmethod
     def findRef(cls, nombre):
         departamentos = cls.ref.get()
-        for key, departamento in departamentos.items():
-            if 'nombre' in departamento and departamento['nombre'] == nombre:
-                return key
+        if departamentos is not None:
+            for key, departamento in departamentos.items():
+                if 'nombre' in departamento and departamento['nombre'] == nombre:
+                    return key
         return None

@@ -117,13 +117,13 @@ def obtener_departamentos():
 
 @app.route('/departamentos', methods=['POST'])
 def agregar_departamento():
-    nuevo_departamento = {
+    '''nuevo_departamento = {
         'nombre': request.form['name'],
         'desc': request.form['desc'],
         'lider': None,
         'n_emp': 0
-    }
-    Departamento.creDep(**nuevo_departamento)
+    }'''
+    Departamento.creDep(request.form['name'],request.form['desc'],None,0)
     return jsonify({'status': 'OK'})
 
 
