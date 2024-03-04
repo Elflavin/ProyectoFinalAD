@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify, render_template
 from entidades.Departamentos import Departamento
 from entidades.Empleados import Empleado
 
-
 # Inicializacion de la aplicacion de Flask
 app = Flask(__name__)
 
@@ -11,10 +10,12 @@ app = Flask(__name__)
 """
 
 
+
 @app.route("/", methods=['GET'])
 def menu_principal():
     return render_template('index.html')
 
+# Empleados
 
 @app.route("/empleados/VistaCrear", methods=['GET'])
 def vista_crear_empleado():
@@ -33,27 +34,31 @@ def vista_modificar_empleado():
 
 @app.route("/empleados/VistaLeer", methods=['GET'])
 def vista_bucsar_empleado():
-    return render_template('empleado/read_empleado.html')
+
+    return render_template('empleado/read_empleado.html',empleados=Empleado.getAllEmp())
 
 
-@app.route("/departamento/VistaCrear", methods=['GET'])
+# Departamentos
+
+
+@app.route("/departamentos/VistaCrear", methods=['GET'])
 def vista_crear_departamento():
-    return render_template('departamento/create_departamento.html')
+    return render_template('departamentos/create_departamento.html')
 
 
-@app.route("/departamento/VistaBorrar", methods=['GET'])
+@app.route("/departamentos/VistaBorrar", methods=['GET'])
 def vista_borrar_departamento():
-    return render_template('departamento/delete_departamento.html')
+    return render_template('departamentos/delete_departamento.html')
 
 
-@app.route("/departamento/VistaModificar", methods=['GET'])
+@app.route("/departamentos/VistaModificar", methods=['GET'])
 def vista_modificar_departamento():
-    return render_template('departamento/update_departamento.html')
+    return render_template('departamentos/update_departamento.html')
 
 
-@app.route("/departamento/VistaLeer", methods=['GET'])
+@app.route("/departamentos/VistaLeer", methods=['GET'])
 def vista_buscar_departamento():
-    return render_template('departamento/read_departamento.html')
+    return render_template('departamentos/read_departamento.html')
 
 
 """
@@ -69,14 +74,10 @@ def obtener_empleados():
 
 @app.route('/empleados', methods=['POST'])
 def agregar_empleado():
-    nuevo_empleado = {
-        'nombre': request.form['firstName'],
-        'apellido': request.form['lastName'],
-        'dni': request.form['dni'],
-        'departamento': None
-    }
+    # print(request.form)
     # Crea un objeto Empleado utilizando los datos del formulario
-    empleado = Empleado(**nuevo_empleado)
+    empleado = Empleado(nombre=request.form['firstName'], appellido=request.form['lastName'], dni=request.form['dni'], departamento=None)
+    # print(empleado)
     empleado.creEmp(empleado)
 
     return jsonify({'status': 'OK'})

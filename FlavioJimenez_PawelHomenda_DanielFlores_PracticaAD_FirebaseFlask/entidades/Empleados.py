@@ -6,11 +6,11 @@ try:
 except ValueError:
     print("Base de datos ya definido.")
 
-ref = db.reference('empleados')
-ref_d = db.reference('departamentos')
 
 
 class Empleado:
+    ref = db.reference('empleados')
+    ref_d = db.reference('departamentos')
 
     def __init__(self, nombre, appellido, dni, departamento):
         self.nombre = nombre
@@ -26,7 +26,7 @@ class Empleado:
 
     @classmethod
     def creEmp(cls, empleado):
-        nuevo_empleado = cls(empleado)
+        nuevo_empleado = cls(empleado.nombre,empleado.apellido,empleado.dni,empleado.departamento)
         if cls.findRef(nuevo_empleado.dni) is None:
             nuevo_empleado_dict = {
                 'nombre': nuevo_empleado.nombre,
@@ -34,14 +34,21 @@ class Empleado:
                 'dni': nuevo_empleado.dni,
                 'departamento': nuevo_empleado.departamento
             }
-            ref.child('empleados').push(nuevo_empleado_dict)
+            cls.ref.child('empleados').push(nuevo_empleado_dict)
         else:
             return {'status': 'Error', 'message': 'El DNI ya esta en uso'}
 
     @classmethod
+    def getAllEmp(cls):
+        tempRef = db.reference("empleados/empleados")
+        emps = tempRef.get()
+
+        return emps
+
+    @classmethod
     def delEmp(cls, dni):
         key = cls.findRef(dni)
-        ref.child('empleados').child(key).delete()
+        cls.ref.child('empleados').child(key).delete()
 
     @classmethod
     def updEmp(cls, empleado=None, obj=None):
@@ -57,14 +64,14 @@ class Empleado:
             updDepNEmp = True
 
         key = cls.findRef(obj)
-        ref.child('empleados').child(key).update(update_data)
+        cls.ref.child('empleados').child(key).update(update_data)
         if updDepNEmp:
             cls.findAndUpdRefDep(empleado.departamento)
 
     @classmethod
     def getEmp(cls, dni):
         key = cls.findRef(dni)
-        emp_data = ref.child('empleados').child(key).get()
+        emp_data = cls.ref.child('empleados').child(key).get()
         if emp_data:
             return cls(
                 nombre=emp_data.get('nombre'),
@@ -78,9 +85,10 @@ class Empleado:
     @classmethod
     def findRef(cls, dni):
         empleados = cls.ref.get()
-        for key, empleado in empleados.items():
-            if 'dni' in empleado and empleado['dni'] == dni:
-                return key
+        if empleados is not None:
+            for key, empleado in empleados.items():
+                if 'dni' in empleado and empleado['dni'] == dni:
+                    return key
         return None
 
     @classmethod
@@ -88,9 +96,9 @@ class Empleado:
         departamentos = cls.ref_d.get()
         for key, departamento in departamentos.items():
             if 'nombre' in departamento and departamento['nombre'] == nombre:
-                query = ref.order_by_child('departamento').equal_to(departamento)
+                query = cls.ref.order_by_child('departamento').equal_to(departamento)
                 resultados = query.get()
 
                 if resultados:
-                    ref_d.child(nombre).update({'n_emp': len(resultados)})
+                    cls.ref_d.child(nombre).update({'n_emp': len(resultados)})
         return None
