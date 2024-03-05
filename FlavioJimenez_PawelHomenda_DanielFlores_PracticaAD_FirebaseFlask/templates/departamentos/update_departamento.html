@@ -8,7 +8,7 @@
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">CRUD ejemplo</a>
+    <a class="navbar-brand" href="#">AD Firebase</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -44,7 +44,7 @@
 	</nav>
     <div class="container mt-5">
         <h2>Actualizar registros</h2>
-        <form action="/departamentos/actualizar" method="put" onsubmit="return validarSeleccion()">
+        <form action="/departamentos/actualizar" method="post" onsubmit="return validarSeleccion()">
             <div class="form-group">
                 <label for="updateName">Nombre del departamento a actualizar:</label>
                 <input type="text" class="form-control" id="updateName" name="updateName" required>
@@ -57,11 +57,11 @@
                 <label for="updateLid">DNI del nuevo lider:</label>
                 <input type="text" class="form-control" id="updateLid" name="updateLid" required>
             </div>
+            <div class="container mt-5">
+                <button type="submit" class="btn btn-primary">Actualizar departamento</button>
+            </div>
         </form>
     </div>
-    <div class="container mt-5">
-		<button type="submit" class="btn btn-primary">Actualizar departamento</button>
-	</div>
     <!-- Bootstrap JS and jQuery (Bootstrap lo requiere) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>

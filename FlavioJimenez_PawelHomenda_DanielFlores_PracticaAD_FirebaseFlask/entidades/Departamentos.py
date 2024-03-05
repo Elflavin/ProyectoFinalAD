@@ -97,7 +97,7 @@ class Departamento:
         if departamentos is not None:
             for key, departamento in departamentos['departamentos'].items():
                 if 'nombre' in departamento and departamento['nombre'] == nombre and 'n_emp' in departamento:
-                    return departamento.n_emp
+                    return departamento['n_emp']
 
     @classmethod
     def getAllDep(cls):

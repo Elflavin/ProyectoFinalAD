@@ -8,7 +8,7 @@
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">CRUD ejemplo</a>
+    <a class="navbar-brand" href="#">AD Firebase</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -44,27 +44,27 @@
 	</nav>
     <div class="container mt-5">
         <h2>Actualizar empleados</h2>
-        <form action="/empleados/actualizar" method="put">
+        <form action="/empleados/actualizar" method="POST">
 			<div class="form-group">
                 <label for="updateDni">DNI del empleado que quieres actualizar:</label>
                 <input type="text" class="form-control" id="updateDni" name="updateDni" required>
             </div>
             <div class="form-group">
-                <label for="updateFirstName">Nombre:</label>
+                <label for="updateFirstName">Nuevo nombre:</label>
                 <input type="text" class="form-control" id="updateFirstName" name="updateFirstName" required>
             </div>
             <div class="form-group">
-                <label for="updateLastName">Apellido:</label>
+                <label for="updateLastName">Nuevo apellido:</label>
                 <input type="text" class="form-control" id="updateLastName" name="updateLastName" required>
             </div>
             <div class="form-group">
-                <label for="updateLastName">Departamento:</label>
+                <label for="updateLastName">Nuevo departamento:</label>
                 <input type="text" class="form-control" id="updateDepartamento" name="updateDepartamento" required>
             </div>
+            <div class="container mt-5">
+                <button type="submit" class="btn btn-primary">Actualizar empleado</button>
+            </div>
         </form>
-    </div>
-    <div class="container mt-5">
-        <button type="submit" class="btn btn-primary">Actualizar empleado</button>
     </div>
 	<!-- Bootstrap JS and jQuery (Bootstrap lo requiere) -->
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
