@@ -1,3 +1,4 @@
+from entidades.Departamentos import Departamento
 from fireb_init import init
 from firebase_admin import db
 
@@ -86,19 +87,30 @@ class Empleado:
     def findRef(cls, dni):
         empleados = cls.ref.get()
         if empleados is not None:
-            for key, empleado in empleados.items():
+            for key, empleado in empleados['empleados'].items():
                 if 'dni' in empleado and empleado['dni'] == dni:
                     return key
         return None
 
     @classmethod
-    def findAndUpdRefDep(cls, nombre):
+    def findAndUpdRefDep(cls, dni, nombre):
         departamentos = cls.ref_d.get()
-        for key, departamento in departamentos.items():
+        empleados = cls.ref.get()
+        for key, empleado in empleados['empleados'].items(): # Actualizar antiguo departamento
+            if 'dni' in empleado and empleado['dni'] == dni and 'departamento' in empleado and empleado['departamento'] != nombre:
+                for key, departamento in departamentos['departamentos']:
+                    if 'nombre' in departamento and departamento['nombre'] == nombre and 'n_emp' in departamento:
+                        query = cls.ref.order_by_child('departamento').equal_to(departamento['nombre'])
+                        resultados = query.get()
+
+                        if resultados:
+                            cls.ref_d.child(Departamento.findRef(departamento['nombre'])).update({'n_emp': len(resultados)})
+
+        for key, departamento in departamentos['departamentos'].items(): # Actualizar nuevo departamento
             if 'nombre' in departamento and departamento['nombre'] == nombre:
-                query = cls.ref.order_by_child('departamento').equal_to(departamento)
+                query = cls.ref.order_by_child('departamento').equal_to(departamento['nombre'])
                 resultados = query.get()
 
                 if resultados:
-                    cls.ref_d.child(nombre).update({'n_emp': len(resultados)})
+                    cls.ref_d.child(Departamento.findRef(nombre)).update({'n_emp': len(resultados)})
         return None

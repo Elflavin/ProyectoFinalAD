@@ -7,10 +7,9 @@ except ValueError:
     print("Base de datos ya definido.")
 
 
-
 class Departamento:
-
     ref = db.reference('departamentos')
+    ref_e = db.reference('empleados')
 
     def __init__(self, nombre, descr, lider, n_emp):
         self.nombre = nombre
@@ -40,10 +39,9 @@ class Departamento:
         else:
             return {'status': 'Error', 'message': 'El nombre ya esta en uso'}
 
-
     @classmethod
     def delDep(cls, dep_id):
-        cls.ref.child('departamentos').child(dep_id).delete()
+        cls.ref.child('departamentos').child(cls.findRef(dep_id)).delete()
 
     @classmethod
     def updDep(cls, departamento=None, obj=None):
@@ -78,7 +76,32 @@ class Departamento:
     def findRef(cls, nombre):
         departamentos = cls.ref.get()
         if departamentos is not None:
-            for key, departamento in departamentos.items():
+            for key, departamento in departamentos['departamentos'].items():
                 if 'nombre' in departamento and departamento['nombre'] == nombre:
                     return key
+        return None
+
+    @classmethod
+    def findRefEmp(cls, dni, nombre):
+        empleados = cls.ref_e.get()
+        if empleados is not None:
+            for key, empleado in empleados['empleados'].items():
+                if 'dni' in empleado and empleado['dni'] == dni and 'departamento' in empleado and empleado[
+                    'departamento'] == nombre:
+                    return True
+        return False
+
+    @classmethod
+    def findNEmp(cls, nombre):
+        departamentos = cls.ref.get()
+        if departamentos is not None:
+            for key, departamento in departamentos['departamentos'].items():
+                if 'nombre' in departamento and departamento['nombre'] == nombre and 'n_emp' in departamento:
+                    return departamento.n_emp
+
+    @classmethod
+    def getAllDep(cls):
+        departamentos = cls.ref.get()
+        if departamentos is not None:
+            return departamentos
         return None

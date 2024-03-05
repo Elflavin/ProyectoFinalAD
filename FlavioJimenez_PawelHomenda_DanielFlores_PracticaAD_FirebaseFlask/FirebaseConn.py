@@ -10,10 +10,10 @@ app = Flask(__name__)
 """
 
 
-
 @app.route("/", methods=['GET'])
 def menu_principal():
     return render_template('index.html')
+
 
 # Empleados
 
@@ -34,8 +34,7 @@ def vista_modificar_empleado():
 
 @app.route("/empleados/VistaLeer", methods=['GET'])
 def vista_bucsar_empleado():
-
-    return render_template('empleado/read_empleado.html',empleados=Empleado.getAllEmp())
+    return render_template('empleado/read_empleado.html', empleados=Empleado.getAllEmp())
 
 
 # Departamentos
@@ -76,31 +75,35 @@ def obtener_empleados():
 def agregar_empleado():
     # print(request.form)
     # Crea un objeto Empleado utilizando los datos del formulario
-    empleado = Empleado(nombre=request.form['firstName'], appellido=request.form['lastName'], dni=request.form['dni'], departamento=None)
+    empleado = Empleado(nombre=request.form['firstName'], appellido=request.form['lastName'], dni=request.form['dni'],
+                        departamento=None)
     # print(empleado)
     empleado.creEmp(empleado)
 
     return jsonify({'status': 'OK'})
 
 
-@app.route('/empleados/<empleado_id>', methods=['DELETE'])
+@app.route('/empleados/eliminar', methods=['POST'])
 def eliminar_empleado():
-    Empleado.delEmp(request.form['obj'])
+    Empleado.delEmp(request.form['dni'])
     return jsonify({'status': 'OK'})
 
 
 # Rutas para actualizar Empleado
-@app.route('/empleados/<empleado_id>', methods=['PUT'])
+@app.route('/empleados/actualizar', methods=['PUT'])
 def actualizar_empleado(empleado_id):
-    nuevo_empleado = {
-        'nombre': request.form['firstName'],
-        'apellido': request.form['lastName'],
-        'dni': request.form['dni'],
-        'departamento': None
-    }
     # Crea un objeto Empleado utilizando los datos del formulario
-    empleado = Empleado(**nuevo_empleado)
-    empleado.updEmp(empleado, request.form['obj'])
+    if Empleado.findAndUpdRefDep(request.form['updateDni'],
+                                 request.form['updateDepartamento']) is not None and Empleado.findRef(
+            request.form['dni'] is not None):
+        nuevo_empleado = {
+            'nombre': request.form['updateFirstName'],
+            'apellido': request.form['updateLastName'],
+            'dni': request.form['updateDni'],
+            'departamento': request.form['updateDepartamento']
+        }
+        empleado = Empleado(**nuevo_empleado)
+        empleado.updEmp(empleado, request.form['obj'])
     return jsonify({'status': 'OK'})
 
 
@@ -117,34 +120,40 @@ def obtener_departamentos():
 
 @app.route('/departamentos', methods=['POST'])
 def agregar_departamento():
-    '''nuevo_departamento = {
-        'nombre': request.form['name'],
-        'desc': request.form['desc'],
-        'lider': None,
-        'n_emp': 0
-    }'''
-    Departamento.creDep(request.form['name'],request.form['desc'],None,0)
+    Departamento.creDep(request.form['name'], request.form['desc'], None, 0)
     return jsonify({'status': 'OK'})
 
 
-@app.route('/departamentos/<departamento_id>', methods=['DELETE'])
+@app.route('/departamentos/eliminar', methods=['POST'])
 def eliminar_departamento():
     Departamento.delDep(request.form['name'])
+    departamentos = Departamento.getAllDep()
+    print(departamentos.__repr__())
     return jsonify({'status': 'OK'})
 
 
 # Rutas para actualizar Departamento
-@app.route('/departamentos/<departamento_id>', methods=['PUT'])
+@app.route('/departamentos/actualizar', methods=['POST'])
 def actualizar_departamento():
-    nuevo_departamento = {
-        'nombre': request.form['name'],
-        'desc': request.form['desc'],
-        'lider': request.form['lider'],
-        'n_emp': None
-    }
-    departamento = Departamento(**nuevo_departamento)
-    Departamento.updDep(departamento, request.form['obj'])
-    return jsonify({'status': 'OK'})
+    if Departamento.findRefEmp(request.form['updateLid'], request.form['updateName']):
+        n_emp = Departamento.findNEmp(request.form['updateName'])
+        nuevo_departamento = {  # Dict para crear el departamento
+            'nombre': request.form['updateName'],
+            'desc': request.form['updateDesc'],
+            'lider': request.form['updateLid'],
+            'n_emp': n_emp
+        }
+        departamento = Departamento(**nuevo_departamento)
+        Departamento.updDep(departamento, request.form['updateName'])
+        return jsonify({'status': 'OK'})
+    else:
+        return "<h1>No puedes asignar como lider a un empleado de otro departamento</h1>"
+
+
+@app.route('/departamentos/mostrar', methods=['GET'])
+def mostrar_departamentos():
+    departamentos = Departamento.getAllDep()
+    return jsonify(departamentos)
 
 
 def main():

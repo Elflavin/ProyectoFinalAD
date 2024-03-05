@@ -43,7 +43,7 @@
     </div>
 	</nav>
     <div class="container mt-5">
-        <h2>Lista empleados</h2>
+        <h2>Lista departamentos</h2>
         <table class="table">
             <thead>
                 <tr>
@@ -63,65 +63,41 @@
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- Firebase -->
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+    <!-- Cargar tabla -->
+    <script>
+    $(document).ready(function () {
+        cargarDepartamentos();
+    });
 
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyA1kmmFjAazn52p1YKZ0ZfZPs-wT3O5b8c",
-            authDomain: "proyectofinalad-af58a.firebaseapp.com",
-            databaseURL: "https://proyectofinalad-af58a-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "proyectofinalad-af58a",
-            storageBucket: "proyectofinalad-af58a.appspot.com",
-            messagingSenderId: "266691159088",
-            appId: "1:266691159088:web:983ea3b7ab95a86f5a79f5",
-            measurementId: "G-3REBPY06WZ"
-        };
-
-        // Inicializa Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-
-        // Referencia a la base de datos en tiempo real de Firebase
-        const db = getDatabase();
-
-        // Referencia al nodo "departamentos" en la base de datos (ajusta según la estructura de tu base de datos)
-        const departamentosRef = ref(db, 'departamentos');
-
-        // Función para mostrar los datos de los departamentos en la tabla
-        function displayDepartmentData(snapshot) {
-            const departamentos = snapshot.val();
-            const tableBody = document.getElementById('departmentTableBody');
-
-            // Limpiar las filas existentes de la tabla
-            tableBody.innerHTML = '';
-
-            // Iterar a través de los departamentos y agregar filas a la tabla
-            for (const key in departamentos) {
-                if (Object.hasOwnProperty.call(departamentos, key)) {
-                    const departamento = departamentos[key];
-
-                    // Agregar una nueva fila a la tabla
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${key}</td>
-                        <td>${departamento.nombre}</td>
-                        <td>${departamento.descripcion}</td>
-                        <td>${departamento.lider}</td>
-                        <td>${departamento.numero_empleados}</td>
-                    `;
-
-                    tableBody.appendChild(row);
-                }
+    function cargarDepartamentos() {
+        $.ajax({
+            url: "/departamentos/mostrar",
+            method: "GET",
+            dataType: "json",
+            success: function (data) {
+                construirFilasTabla(data);
+            },
+            error: function (error) {
+                console.error("Error al obtener datos:", error);
             }
-        }
+        });
+    }
 
-        // Configurar un escucha para actualizar la tabla cuando cambien los datos
-        onValue(departamentosRef, displayDepartmentData);
+    function construirFilasTabla(departamentos) {
+        var tablaBody = $("#tablaBody");
+        tablaBody.empty(); // Limpia cualquier contenido existente
+
+        departamentos.forEach(function (departamento) {
+            var fila = $("<tr>");
+            fila.append($("<td>").text(departamento.id));
+            fila.append($("<td>").text(departamento.nombre));
+            fila.append($("<td>").text(departamento.descripcion));
+            fila.append($("<td>").text(departamento.lider));
+            fila.append($("<td>").text(departamento.num_empleados));
+
+            tablaBody.append(fila);
+        });
+    }
     </script>
 </body>
 </html>
