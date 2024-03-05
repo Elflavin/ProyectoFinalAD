@@ -73,6 +73,12 @@ class Departamento:
             return None
 
     @classmethod
+    def findAllDep(cls):
+        tempRef = db.reference('departamentos/departamentos')
+
+        return tempRef.get()
+
+    @classmethod
     def findRef(cls, nombre):
         departamentos = cls.ref.get()
         if departamentos is not None:
@@ -97,7 +103,7 @@ class Departamento:
         if departamentos is not None:
             for key, departamento in departamentos['departamentos'].items():
                 if 'nombre' in departamento and departamento['nombre'] == nombre and 'n_emp' in departamento:
-                    return departamento['n_emp']
+                    return departamento.n_emp
 
     @classmethod
     def getAllDep(cls):

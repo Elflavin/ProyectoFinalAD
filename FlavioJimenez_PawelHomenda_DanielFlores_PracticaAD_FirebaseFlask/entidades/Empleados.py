@@ -42,9 +42,8 @@ class Empleado:
     @classmethod
     def getAllEmp(cls):
         tempRef = db.reference("empleados/empleados")
-        emps = tempRef.get()
 
-        return emps
+        return tempRef.get()
 
     @classmethod
     def delEmp(cls, dni):
@@ -62,9 +61,12 @@ class Empleado:
             update_data['dni'] = empleado.dni
         if empleado.departamento is not None:
             update_data['departamento'] = empleado.departamento
+            updDepNEmp = True
 
         key = cls.findRef(obj)
         cls.ref.child('empleados').child(key).update(update_data)
+        if updDepNEmp:
+            cls.findAndUpdRefDep(empleado.departamento)
 
     @classmethod
     def getEmp(cls, dni):
@@ -90,70 +92,24 @@ class Empleado:
         return None
 
     @classmethod
-    def findRefDep(cls, nombre):
+    def findAndUpdRefDep(cls, dni, nombre):
         departamentos = cls.ref_d.get()
-        if departamentos is not None:
-            for key, departamento in departamentos['departamentos'].items():
-                if 'nombre' in departamento and departamento['nombre'] == nombre:
-                    return key
+        empleados = cls.ref.get()
+        for key, empleado in empleados['empleados'].items(): # Actualizar antiguo departamento
+            if 'dni' in empleado and empleado['dni'] == dni and 'departamento' in empleado and empleado['departamento'] != nombre:
+                for key, departamento in departamentos['departamentos']:
+                    if 'nombre' in departamento and departamento['nombre'] == nombre and 'n_emp' in departamento:
+                        query = cls.ref.order_by_child('departamento').equal_to(departamento['nombre'])
+                        resultados = query.get()
+
+                        if resultados:
+                            cls.ref_d.child(Departamento.findRef(departamento['nombre'])).update({'n_emp': len(resultados)})
+
+        for key, departamento in departamentos['departamentos'].items(): # Actualizar nuevo departamento
+            if 'nombre' in departamento and departamento['nombre'] == nombre:
+                query = cls.ref.order_by_child('departamento').equal_to(departamento['nombre'])
+                resultados = query.get()
+
+                if resultados:
+                    cls.ref_d.child(Departamento.findRef(nombre)).update({'n_emp': len(resultados)})
         return None
-
-    @classmethod
-    def updateEmployee(cls, dni, nuevo_departamento, nuevo_nombre, nuevo_apellido):
-        if nuevo_departamento:
-            # Crea un objeto Empleado utilizando los datos del formulario
-            empleado = cls(
-                nombre=nuevo_nombre,
-                appellido=nuevo_apellido,
-                dni=dni,
-                departamento=nuevo_departamento
-            )
-
-            # Actualiza el empleado en Firebase
-            empleado.updEmp(empleado, dni)
-
-            return empleado
-
-        return None
-
-    @classmethod
-    def updatePreviousDepartment(cls, dni, nuevo_departamento):
-        empleado = cls.findRef(dni)
-
-        if 'departamento' in empleado and empleado['departamento'] != nuevo_departamento:
-            departamento_antiguo = cls.findRefDep(empleado['departamento'])
-
-            if cls.isLeaderOfDepartment(dni, empleado['departamento']):
-                cls.setLeaderOfDepartment(departamento_antiguo, "Nadie")
-
-            cls.decreaseEmpCountInDepartment(departamento=departamento_antiguo)
-
-    @classmethod
-    def updateNewDepartment(cls, dni, nuevo_departamento):
-        if nuevo_departamento:
-            # Aumentar en uno el número de empleados en el nuevo departamento
-            cls.increaseEmpCountInDepartment(nuevo_departamento)
-
-    # Métodos auxiliares para la actualización del departamento
-    @classmethod
-    def decreaseEmpCountInDepartment(cls, departamento):
-        # Reducir en uno el número de empleados en el departamento
-        cls.ref_d.child(departamento).child('n_emp').transaction(
-            lambda current_value: current_value - 1 if current_value else 0)
-
-    @classmethod
-    def increaseEmpCountInDepartment(cls, departamento):
-        # Aumentar en uno el número de empleados en el departamento
-        cls.ref_d.child(departamento).child('n_emp').transaction(
-            lambda current_value: current_value + 1 if current_value else 1)
-
-    @classmethod
-    def isLeaderOfDepartment(cls, dni, departamento):
-        # Verificar si el empleado es el líder del departamento
-        lider = cls.ref_d.child(departamento).child('lider').get()
-        return lider == dni
-
-    @classmethod
-    def setLeaderOfDepartment(cls, departamento, nuevo_lider):
-        # Establecer el nuevo líder del departamento
-        cls.ref_d.child(departamento).update({'lider': nuevo_lider})

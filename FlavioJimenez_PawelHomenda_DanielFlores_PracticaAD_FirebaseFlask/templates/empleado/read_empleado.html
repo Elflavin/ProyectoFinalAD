@@ -55,7 +55,15 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Introducir datos aqui -->
+            {% for empleado in empleados %}
+                <tr>
+                    <td>{{empleado}}</td>
+                    <td>{{empleados[empleado]['nombre']}}</td>
+                    <td>{{empleados[empleado]['apellido']}}</td>
+                    <td>{{empleados[empleado]['dni']}}</td>
+                    <td>{{empleados[empleado]['departamento']}}</td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>

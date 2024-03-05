@@ -8,7 +8,7 @@
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">AD Firebase</a>
+    <a class="navbar-brand" href="#">Proyecto AD</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -55,7 +55,15 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Mostrar registros de la db aqui -->
+                {% for departamento in departamentos %}
+                <tr>
+                    <td>{{departamento}}</td>
+                    <td>{{departamentos[departamento]['nombre']}}</td>
+                    <td>{{departamentos[departamento]['descr']}}</td>
+                    <td>{{departamentos[departamento]['lider']}}</td>
+                    <td>{{departamentos[departamento]['n_emp']}}</td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
